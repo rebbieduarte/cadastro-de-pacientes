@@ -3,13 +3,13 @@
 #include <string.h>
 #include <unistd.h> // Para a função getpass()
 
-// Estrutura para representar um usuário
+// Estrutura do usuário
 struct Usuario {
     char login[50];
     char senha[50];
 };
 
-// Estrutura para representar um paciente
+// Estrutura do paciente
 struct Paciente {
     char nome[100];
     int diaNascimento;
@@ -25,7 +25,7 @@ struct Paciente {
     char comorbidade[100];
 };
 
-// Função para limpar o buffer de entrada
+// Limpar o buffer de entrada
 void limparBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -50,7 +50,7 @@ void cadastrarUsuario(struct Usuario *usuario) {
 
     printf("Login: ");
     fgets(usuario->login, sizeof(usuario->login), stdin);
-    usuario->login[strcspn(usuario->login, "\n")] = 0; // Remove o \n do final de fgets
+    usuario->login[strcspn(usuario->login, "\n")] = 0; 
 
     printf("Senha: ");
     strncpy(usuario->senha, getpass(""), sizeof(usuario->senha)); // Captura a senha sem exibir no terminal
@@ -68,8 +68,7 @@ void cadastrarPaciente(struct Paciente *paciente) {
 
     printf("Nome: ");
     fgets(paciente->nome, sizeof(paciente->nome), stdin);
-    paciente->nome[strcspn(paciente->nome, "\n")] = 0; // Remove o \n do final de fgets
-
+    paciente->nome[strcspn(paciente->nome, "\n")] = 0; 
     printf("Data de Nascimento (dd mm aaaa): ");
     scanf("%d %d %d", &paciente->diaNascimento, &paciente->mesNascimento, &paciente->anoNascimento);
     limparBuffer();
@@ -80,36 +79,36 @@ void cadastrarPaciente(struct Paciente *paciente) {
 
     printf("CPF: ");
     fgets(paciente->cpf, sizeof(paciente->cpf), stdin);
-    paciente->cpf[strcspn(paciente->cpf, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->cpf[strcspn(paciente->cpf, "\n")] = 0; 
 
     printf("Endereço (com número): ");
     fgets(paciente->endereco, sizeof(paciente->endereco), stdin);
-    paciente->endereco[strcspn(paciente->endereco, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->endereco[strcspn(paciente->endereco, "\n")] = 0; 
 
     printf("Bairro: ");
     fgets(paciente->bairro, sizeof(paciente->bairro), stdin);
-    paciente->bairro[strcspn(paciente->bairro, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->bairro[strcspn(paciente->bairro, "\n")] = 0; 
 
     printf("Cidade: ");
     fgets(paciente->cidade, sizeof(paciente->cidade), stdin);
-    paciente->cidade[strcspn(paciente->cidade, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->cidade[strcspn(paciente->cidade, "\n")] = 0; 
 
     printf("Estado (sigla): ");
     fgets(paciente->estado, sizeof(paciente->estado), stdin);
-    paciente->estado[strcspn(paciente->estado, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->estado[strcspn(paciente->estado, "\n")] = 0; 
 
     printf("Número de Telefone: ");
     fgets(paciente->telefone, sizeof(paciente->telefone), stdin);
-    paciente->telefone[strcspn(paciente->telefone, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->telefone[strcspn(paciente->telefone, "\n")] = 0; 
 
     printf("Tipo de Comorbidade: ");
     fgets(paciente->comorbidade, sizeof(paciente->comorbidade), stdin);
-    paciente->comorbidade[strcspn(paciente->comorbidade, "\n")] = 0; // Remove o \n do final de fgets
+    paciente->comorbidade[strcspn(paciente->comorbidade, "\n")] = 0; 
 
     printf("\nDados do paciente cadastrados com sucesso!\n\n");
 }
 
-// Função para salvar os dados do paciente em um arquivo txt
+// Função para salvar os dados do paciente
 void salvarDadosPaciente(struct Paciente paciente) {
     FILE *arquivo;
     arquivo = fopen("pacientes.txt", "a"); // Abre o arquivo para escrita (append)
@@ -162,7 +161,7 @@ void consultarPacientes() {
 // Função para salvar os dados do usuário em um arquivo txt
 void salvarDadosUsuario(struct Usuario usuario) {
     FILE *arquivo;
-    arquivo = fopen("usuarios.txt", "a"); // Abre o arquivo para escrita (append)
+    arquivo = fopen("usuarios.txt", "a"); 
 
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo.\n");

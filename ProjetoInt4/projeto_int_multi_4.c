@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h> // Para a função getpass()
 
 // Estrutura para representar um usuário
 struct Usuario {
@@ -30,9 +31,18 @@ void limparBuffer() {
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
+// Função para limpar a tela (compatível com Windows e Linux/Mac)
+void limparTela() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 // Função para cadastrar novo usuário
 void cadastrarUsuario(struct Usuario *usuario) {
-    system("clear"); // Limpa a tela
+    limparTela();
 
     printf("==============================\n");
     printf("    Cadastro de Usuário\n");
@@ -43,15 +53,14 @@ void cadastrarUsuario(struct Usuario *usuario) {
     usuario->login[strcspn(usuario->login, "\n")] = 0; // Remove o \n do final de fgets
 
     printf("Senha: ");
-    fgets(usuario->senha, sizeof(usuario->senha), stdin);
-    usuario->senha[strcspn(usuario->senha, "\n")] = 0; // Remove o \n do final de fgets
+    strncpy(usuario->senha, getpass(""), sizeof(usuario->senha)); // Captura a senha sem exibir no terminal
 
     printf("\nUsuário cadastrado com sucesso!\n\n");
 }
 
 // Função para cadastrar novo paciente
 void cadastrarPaciente(struct Paciente *paciente) {
-    system("clear"); // Limpa a tela no Linux/MacOS
+    limparTela();
 
     printf("==============================\n");
     printf("    Cadastro de Paciente\n");
@@ -101,7 +110,7 @@ void cadastrarPaciente(struct Paciente *paciente) {
 }
 
 // Função para salvar os dados do paciente em um arquivo txt
-void salvarDados(struct Paciente paciente) {
+void salvarDadosPaciente(struct Paciente paciente) {
     FILE *arquivo;
     arquivo = fopen("pacientes.txt", "a"); // Abre o arquivo para escrita (append)
 
@@ -126,13 +135,70 @@ void salvarDados(struct Paciente paciente) {
     printf("Dados salvos em pacientes.txt\n\n");
 }
 
-// Função para limpar a tela (compatível com Windows e Linux/Mac)
-void limparTela() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+// Função para ler e exibir os dados dos pacientes cadastrados
+void consultarPacientes() {
+    FILE *arquivo;
+    char linha[200];
+
+    arquivo = fopen("pacientes.txt", "r"); // Abre o arquivo para leitura
+
+    if (arquivo == NULL) {
+        printf("Nenhum paciente cadastrado ainda.\n\n");
+        return;
+    }
+
+    printf("==============================\n");
+    printf("    Pacientes Cadastrados\n");
+    printf("==============================\n");
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        printf("%s", linha);
+    }
+
+    fclose(arquivo);
+    printf("\n");
+}
+
+// Função para salvar os dados do usuário em um arquivo txt
+void salvarDadosUsuario(struct Usuario usuario) {
+    FILE *arquivo;
+    arquivo = fopen("usuarios.txt", "a"); // Abre o arquivo para escrita (append)
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    fprintf(arquivo, "Login: %s\n", usuario.login);
+    // Não imprime a senha no arquivo
+    fprintf(arquivo, "========================================\n");
+
+    fclose(arquivo);
+    printf("Dados salvos em usuarios.txt\n\n");
+}
+
+// Função para ler e exibir os dados dos usuários cadastrados
+void consultarUsuarios() {
+    FILE *arquivo;
+    char linha[200];
+
+    arquivo = fopen("usuarios.txt", "r"); // Abre o arquivo para leitura
+
+    if (arquivo == NULL) {
+        printf("Nenhum usuário cadastrado ainda.\n\n");
+        return;
+    }
+
+    printf("==============================\n");
+    printf("    Usuários Cadastrados\n");
+    printf("==============================\n");
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        printf("%s", linha);
+    }
+
+    fclose(arquivo);
+    printf("\n");
 }
 
 int main() {
@@ -149,7 +215,9 @@ int main() {
         printf("==============================\n");
         printf("1. Cadastrar novo usuário\n");
         printf("2. Cadastrar novo paciente\n");
-        printf("3. Sair\n");
+        printf("3. Consultar usuários cadastrados\n");
+        printf("4. Consultar pacientes cadastrados\n");
+        printf("5. Sair\n");
         printf("Escolha uma opção: ");
         scanf("%d", &opcao);
         limparBuffer();
@@ -157,12 +225,19 @@ int main() {
         switch(opcao) {
             case 1:
                 cadastrarUsuario(&usuario);
+                salvarDadosUsuario(usuario);
                 break;
             case 2:
                 cadastrarPaciente(&paciente);
-                salvarDados(paciente);
+                salvarDadosPaciente(paciente);
                 break;
             case 3:
+                consultarUsuarios();
+                break;
+            case 4:
+                consultarPacientes();
+                break;
+            case 5:
                 printf("Encerrando o programa...\n");
                 break;
             default:
@@ -173,7 +248,7 @@ int main() {
         getchar(); // Espera a tecla Enter ser pressionada
         limparTela();
 
-    } while (opcao != 3);
+    } while (opcao != 5);
 
     return 0;
 }

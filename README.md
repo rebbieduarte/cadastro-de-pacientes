@@ -1,56 +1,56 @@
-# Resumo Detalhado do Código
+# Projeto Integrador Multidisciplinar IV
 
-## Estruturas de Dados
+* Projeto multidisciplinar iniciado no 2º semestre pela UNIP, onde consistia em um programa simples de cadastro de pacientes diagnosticados com COVID-19 para monitoramente das unidades de saúde básica da região. Projeto inteiramente feito na linguagem C, utilizando boas práticas de programação para que o código seja o mais semântico possível.
 
-### `struct Usuario`
-- **Descrição**: Representa um usuário com login e senha.
-- **Campos**:
-  - `char login[50]`: Armazena o login do usuário.
-  - `char senha[50]`: Armazena a senha do usuário.
+## Resumo do projeto
 
-### `struct Paciente`
-- **Descrição**: Representa um paciente com informações detalhadas.
-- **Campos**:
-  - `char nome[100]`: Nome do paciente.
-  - `int diaNascimento, mesNascimento, anoNascimento`: Data de nascimento do paciente.
-  - `float peso`: Peso do paciente.
-  - `char cpf[12]`: CPF do paciente.
-  - `char endereco[200]`: Endereço completo do paciente.
-  - `char bairro[50]`: Bairro do paciente.
-  - `char cidade[50]`: Cidade do paciente.
-  - `char estado[3]`: Estado do paciente (sigla).
-  - `char telefone[15]`: Número de telefone do paciente.
-  - `char comorbidade[100]`: Tipo de comorbidade do paciente.
+  * Estruturas de Dados
 
-## Funções
+    `struct Usuario`
+    - **Descrição**: Representa um usuário com login e senha.
+    - **Campos**:
+    - `char login[50]`: Armazena o login do usuário.
+    - `char senha[50]`: Armazena a senha do usuário.
 
-### `limparBuffer()`
-- **Descrição**: Limpa o buffer de entrada para evitar problemas com entradas de usuário.
-- **Implementação**: Lê e descarta caracteres do buffer até encontrar uma nova linha ou o fim do arquivo.
+    - Cada usuário deveria conter um login e senha que seria usado para cadastrar os pacientes. Inicialmente, no projeto original (que já não tenho acesso), o login e senha eram pré-setados no código, ou seja, não havia possibilidade de criação de um novo usuário.
 
-### `cadastrarUsuario(struct Usuario *usuario)`
-- **Descrição**: Captura dados de login e senha e armazena na estrutura `Usuario`.
-- **Implementação**: Utiliza `fgets` para ler strings e remove o caractere de nova linha do final com `strcspn`.
+    ```
+      printf("Login: ");
+      fgets(usuario->login, sizeof(usuario->login), stdin);
+      usuario->login[strcspn(usuario->login, "\n")] = 0; // Remove o \n do final de fgets
 
-### `cadastrarPaciente(struct Paciente *paciente)`
-- **Descrição**: Captura informações detalhadas de um novo paciente e armazena na estrutura `Paciente`.
-- **Implementação**: Utiliza `fgets` para ler strings e `scanf` para capturar números e ponto flutuante, removendo o caractere de nova linha com `strcspn`.
+      printf("Senha: ");
+      strncpy(usuario->senha, getpass(""), sizeof(usuario->senha)); // Captura a senha sem exibir no terminal
 
-### `salvarDados(struct Paciente paciente)`
-- **Descrição**: Salva os dados de um paciente em um arquivo de texto (`pacientes.txt`).
-- **Implementação**: Abre o arquivo em modo append (`"a"`), escreve os dados formatados e fecha o arquivo após a escrita.
+      printf("\nUsuário cadastrado com sucesso!\n\n"); 
+    
+    ```
 
-### `limparTela()`
-- **Descrição**: Limpa a tela do console, compatível com sistemas Windows e Linux/Mac.
-- **Implementação**: Usa diretivas de pré-processador (`#ifdef`) para determinar o comando a ser executado (`"cls"` para Windows e `"clear"` para Linux/Mac).
 
-## Função Principal (`main`)
+    - Dessa forma, é possível criar diversos usuários com login e senha distintos.
 
-- **Descrição**: Apresenta um menu interativo para o usuário interagir com o sistema de cadastro de usuários e pacientes.
-- **Implementação**: 
-  - Utiliza um loop `do-while` para exibir repetidamente o menu até que o usuário escolha sair.
-  - Captura a escolha do usuário, executa a função correspondente ao menu escolhido (`cadastrarUsuario`, `cadastrarPaciente` ou saída do programa) e limpa a tela entre as operações.
-  - Utiliza `getchar()` para esperar que o usuário pressione Enter antes de limpar a tela e exibir o menu novamente.
+---
+
+### Principais Funções
+   * `limparBuffer()`
+    - **Descrição**: Limpa o buffer de entrada para evitar problemas com entradas de usuário.
+    - **Implementação**: Lê e descarta caracteres do buffer até encontrar uma nova linha ou o fim do arquivo.
+
+   * `cadastrarUsuario(struct Usuario *usuario)`
+    - **Descrição**: Captura dados de login e senha e armazena na estrutura `Usuario`.
+    - **Implementação**: Utiliza `fgets` para ler strings e remove o caractere de nova linha do final com `strcspn`.
+
+   * `cadastrarPaciente(struct Paciente *paciente)`
+    - **Descrição**: Captura informações detalhadas de um novo paciente e armazena na estrutura `Paciente`.
+    - **Implementação**: Utiliza `fgets` para ler strings e `scanf` para capturar números e ponto flutuante, removendo o caractere de nova linha com `strcspn`.
+
+   * `salvarDados(struct Paciente paciente)`
+    - **Descrição**: Salva os dados de um paciente em um arquivo de texto (`pacientes.txt`).
+    - **Implementação**: Abre o arquivo em modo append (`"a"`), escreve os dados formatados e fecha o arquivo após a escrita.
+
+   * `limparTela()`
+    - **Descrição**: Limpa a tela do console, compatível com sistemas Windows e Linux/Mac.
+    - **Implementação**: Usa diretivas de pré-processador (`#ifdef`) para determinar o comando a ser executado (`"cls"` para Windows e `"clear"` para Linux/Mac).
 
 ---
 
